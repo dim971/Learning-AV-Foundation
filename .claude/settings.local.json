@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(tree:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Read(//Users/dmerault/Documents/Workspace/**)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(python3:*)",
+      "Bash(xargs:*)",
+      "Bash(git rm:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)"
     ],
     "deny": [],
     "ask": []
