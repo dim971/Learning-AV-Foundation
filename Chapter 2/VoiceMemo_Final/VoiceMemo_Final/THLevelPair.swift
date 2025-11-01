@@ -23,8 +23,20 @@
 //  THE SOFTWARE.
 //
 
-@interface THAppDelegate : UIResponder <UIApplicationDelegate>
+import Foundation
 
-@property (strong, nonatomic) UIWindow *window;
+class THLevelPair: NSObject {
 
-@end
+    let level: Float
+    let peakLevel: Float
+
+    class func levels(level: Float, peakLevel: Float) -> THLevelPair {
+        return THLevelPair(level: level, peakLevel: peakLevel)
+    }
+
+    init(level: Float, peakLevel: Float) {
+        self.level = level
+        self.peakLevel = peakLevel
+        super.init()
+    }
+}

@@ -26,51 +26,48 @@
 // sample projects.  It creates an internal table storing the precomputed db -> linear
 // values.
 
-#import "THMeterTable.h"
+import Foundation
 
-#define MIN_DB -60.0f
-#define TABLE_SIZE 300
+private let MIN_DB: Float = -60.0
+private let TABLE_SIZE = 300
 
-@implementation THMeterTable {
-    float _scaleFactor;
-    NSMutableArray *_meterTable;
+private func dbToAmp(_ dB: Float) -> Float {
+    return powf(10.0, 0.05 * dB)
 }
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        float dbResolution = MIN_DB / (TABLE_SIZE - 1);
+class THMeterTable: NSObject {
 
-        _meterTable = [NSMutableArray arrayWithCapacity:TABLE_SIZE];
-        _scaleFactor = 1.0f / dbResolution;
+    private var scaleFactor: Float = 0.0
+    private var meterTable: [Float] = []
 
-        float minAmp = dbToAmp(MIN_DB);
-        float ampRange = 1.0 - minAmp;
-        float invAmpRange = 1.0 / ampRange;
+    override init() {
+        super.init()
 
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            float decibels = i * dbResolution;
-            float amp = dbToAmp(decibels);
-            float adjAmp = (amp - minAmp) * invAmpRange;
-            _meterTable[i] = @(adjAmp);
+        let dbResolution = MIN_DB / Float(TABLE_SIZE - 1)
+
+        meterTable = [Float](repeating: 0.0, count: TABLE_SIZE)
+        scaleFactor = 1.0 / dbResolution
+
+        let minAmp = dbToAmp(MIN_DB)
+        let ampRange = 1.0 - minAmp
+        let invAmpRange = 1.0 / ampRange
+
+        for i in 0..<TABLE_SIZE {
+            let decibels = Float(i) * dbResolution
+            let amp = dbToAmp(decibels)
+            let adjAmp = (amp - minAmp) * invAmpRange
+            meterTable[i] = adjAmp
         }
     }
-    return self;
-}
 
-float dbToAmp(float dB) {
-    return powf(10.0f, 0.05f * dB);
-}
-
-- (float)valueForPower:(float)power {
-    if (power < MIN_DB) {
-        return 0.0f;
-    } else if (power >= 0.0f) {
-        return 1.0f;
-    } else {
-        int index = (int) (power * _scaleFactor);
-        return [_meterTable[index] floatValue];
+    func value(power: Float) -> Float {
+        if power < MIN_DB {
+            return 0.0
+        } else if power >= 0.0 {
+            return 1.0
+        } else {
+            let index = Int(power * scaleFactor)
+            return meterTable[index]
+        }
     }
 }
-
-@end

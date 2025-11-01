@@ -22,12 +22,27 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
-// This code is based on Apple's MeterTable.cpp code used by the avTouch and SpeakHere
-// sample projects.  It creates an internal table storing the precomputed db -> linear
-// values.
 
-@interface THMeterTable : NSObject
+import UIKit
 
-- (float)valueForPower:(float)power;
+class THLevelMeterColorThreshold: NSObject {
 
-@end
+    let maxValue: CGFloat
+    let color: UIColor
+    let name: String
+
+    class func colorThreshold(maxValue: CGFloat, color: UIColor, name: String) -> THLevelMeterColorThreshold {
+        return THLevelMeterColorThreshold(maxValue: maxValue, color: color, name: name)
+    }
+
+    init(maxValue: CGFloat, color: UIColor, name: String) {
+        self.maxValue = maxValue
+        self.color = color
+        self.name = name
+        super.init()
+    }
+
+    override var description: String {
+        return name
+    }
+}
