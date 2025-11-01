@@ -26,8 +26,48 @@
 // sample projects.  It creates an internal table storing the precomputed db -> linear
 // values.
 
-@interface THMeterTable : NSObject
+import Foundation
 
-- (float)valueForPower:(float)power;
+private let MIN_DB: Float = -60.0
+private let TABLE_SIZE = 300
 
-@end
+private func dbToAmp(_ dB: Float) -> Float {
+    return powf(10.0, 0.05 * dB)
+}
+
+class THMeterTable: NSObject {
+
+    private var scaleFactor: Float = 0.0
+    private var meterTable: [Float] = []
+
+    override init() {
+        super.init()
+
+        let dbResolution = MIN_DB / Float(TABLE_SIZE - 1)
+
+        meterTable.reserveCapacity(TABLE_SIZE)
+        scaleFactor = 1.0 / dbResolution
+
+        let minAmp = dbToAmp(MIN_DB)
+        let ampRange = 1.0 - minAmp
+        let invAmpRange = 1.0 / ampRange
+
+        for i in 0..<TABLE_SIZE {
+            let decibels = Float(i) * dbResolution
+            let amp = dbToAmp(decibels)
+            let adjAmp = (amp - minAmp) * invAmpRange
+            meterTable.append(adjAmp)
+        }
+    }
+
+    func value(forPower power: Float) -> Float {
+        if power < MIN_DB {
+            return 0.0
+        } else if power >= 0.0 {
+            return 1.0
+        } else {
+            let index = Int(power * scaleFactor)
+            return meterTable[index]
+        }
+    }
+}

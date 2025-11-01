@@ -23,8 +23,26 @@
 //  THE SOFTWARE.
 //
 
-@interface THAppDelegate : UIResponder <UIApplicationDelegate>
+import UIKit
 
-@property (strong, nonatomic) UIWindow *window;
+class THLevelMeterColorThreshold: NSObject {
 
-@end
+    let maxValue: CGFloat
+    let color: UIColor
+    let name: String
+
+    class func colorThreshold(withMaxValue maxValue: CGFloat, color: UIColor, name: String) -> THLevelMeterColorThreshold {
+        return THLevelMeterColorThreshold(maxValue: maxValue, color: color, name: name)
+    }
+
+    init(maxValue: CGFloat, color: UIColor, name: String) {
+        self.maxValue = maxValue
+        self.color = color
+        self.name = name
+        super.init()
+    }
+
+    override var description: String {
+        return name
+    }
+}

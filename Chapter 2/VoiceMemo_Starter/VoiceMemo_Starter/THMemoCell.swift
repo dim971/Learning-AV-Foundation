@@ -23,6 +23,11 @@
 //  THE SOFTWARE.
 //
 
-@interface MainViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+import UIKit
 
-@end
+class THMemoCell: UITableViewCell {
+
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
+}

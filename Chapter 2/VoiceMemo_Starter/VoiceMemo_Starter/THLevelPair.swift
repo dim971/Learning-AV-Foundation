@@ -23,60 +23,20 @@
 //  THE SOFTWARE.
 //
 
-#import "THRecorderController.h"
-#import <AVFoundation/AVFoundation.h>
-#import "THMemo.h"
-#import "THLevelPair.h"
-#import "THMeterTable.h"
+import Foundation
 
-@interface THRecorderController () <AVAudioRecorderDelegate>
+class THLevelPair: NSObject {
 
-@property (strong, nonatomic) AVAudioPlayer *player;
-@property (strong, nonatomic) AVAudioRecorder *recorder;
-@property (strong, nonatomic) THRecordingStopCompletionHandler completionHandler;
+    let level: Float
+    let peakLevel: Float
 
-@end
-
-@implementation THRecorderController
-
-- (id)init {
-    self = [super init];
-    if (self) {
-
+    class func levels(withLevel level: Float, peakLevel: Float) -> THLevelPair {
+        return THLevelPair(level: level, peakLevel: peakLevel)
     }
-    return self;
+
+    init(level: Float, peakLevel: Float) {
+        self.level = level
+        self.peakLevel = peakLevel
+        super.init()
+    }
 }
-
-- (BOOL)record {
-    return NO;
-}
-
-- (void)pause {
-
-}
-
-- (void)stopWithCompletionHandler:(THRecordingStopCompletionHandler)handler {
-
-}
-
-- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)success {
-
-}
-
-- (void)saveRecordingWithName:(NSString *)name completionHandler:(THRecordingSaveCompletionHandler)handler {
-
-}
-
-- (THLevelPair *)levels {
-    return nil;
-}
-
-- (NSString *)formattedCurrentTime {
-    return @"00:00:00";
-}
-
-- (BOOL)playbackMemo:(THMemo *)memo {
-    return NO;
-}
-
-@end
